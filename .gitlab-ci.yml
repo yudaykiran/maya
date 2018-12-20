@@ -27,9 +27,9 @@ build-maya:
      - make format
   
   # Download kubectl, which is a requirement for using minikube.
-     - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+     - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl && chmod +x kubectl &&  mv kubectl /usr/local/bin/
   # Download minikube.
-     - curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.28.2/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+     - curl -Lo minikube https://storage.googleapis.com/minikube/releases/v0.28.2/minikube-linux-amd64 && chmod +x minikube &&  mv minikube /usr/local/bin/
      - export MINIKUBE_WANTUPDATENOTIFICATION=false
      - export MINIKUBE_WANTREPORTERRORPROMPT=false
      - export MINIKUBE_HOME=$HOME
