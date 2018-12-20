@@ -8,7 +8,7 @@ build-maya:
    stage: build
    before_script:
      - apt-get update
-     - apt-get install --yes wget unzip
+     - apt-get install --yes wget unzip rsync
      - export COMMIT=${CI_COMMIT_SHA:0:8}
      - wget https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz
      - tar -xvf go${go_version}.linux-amd64.tar.gz
