@@ -202,9 +202,9 @@ echo "************** Snapshot and Clone related tests***************************
 
 ## install iscsi pkg
 echo "Installing iscsi packages"
-sudo apt-get install open-iscsi
-sudo service iscsid start
-sudo service iscsid status
+ #apt-get install open-iscsi
+ #service iscsid start
+ #service iscsid status
 
 kubectl get pods --all-namespaces
 kubectl get sc

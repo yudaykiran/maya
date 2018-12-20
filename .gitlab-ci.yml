@@ -3,27 +3,28 @@ stages:
   - baseline
 #  - cleanup
 build-maya:
-  variables:
-    go_version: 1.11.2
-  stage: build
-  before_script:
-    - apt-get update
-    - apt-get install --yes wget unzip
-    - export COMMIT=${CI_COMMIT_SHA:0:8}
-    - wget https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz
-    - tar -xvf go${go_version}.linux-amd64.tar.gz
-    - mv go /usr/local
-    - mkdir -p $HOME/go
-    - export GOPATH=$HOME/go
-    - export PATH=$HOME/go/bin:$PATH
-    - mkdir -p $HOME/go/src/github.com/openebs/maya
-    - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/openebs/maya/ #CI_PROJECT_DIR is full path where project is cloned
-    - go env
-    - ls $GOPATH
-    - cd ${HOME}/go/src/github.com/openebs/maya
+   variables:
+     go_version: 1.11.2
+   stage: build
+   before_script:
+     - apt-get update
+     - apt-get install --yes wget unzip
+     - export COMMIT=${CI_COMMIT_SHA:0:8}
+     - wget https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz
+     - tar -xvf go${go_version}.linux-amd64.tar.gz
+     - mv go /usr/local
+     - mkdir -p $HOME/go
+     - export COMMIT=${CI_COMMIT_SHA:0:8}
+     - export GOPATH=$HOME/go
+     - export PATH=$HOME/go/bin:$PATH
+     - mkdir -p $HOME/go/src/github.com/openebs/maya
+     - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/openebs/maya/ #CI_PROJECT_DIR is full path where project is cloned
+     - go env
+     - ls $GOPATH
+     - cd ${HOME}/go/src/github.com/openebs/maya
 
-    - make bootstrap
-    - make format
+     - make bootstrap
+     - make format
   
   # Download kubectl, which is a requirement for using minikube.
      - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
@@ -36,9 +37,9 @@ build-maya:
      - mkdir $HOME/.kube || true
      - touch $HOME/.kube/config
      - export KUBECONFIG=$HOME/.kube/config
-     - sudo minikube start --vm-driver=none --bootstrapper=localkube --kubernetes-version=v1.10.0 --extra-config=apiserver.Authorization.Mode=RBAC --feature-gates=MountPropagation=false
+     - minikube start --vm-driver=none --bootstrapper=localkube --kubernetes-version=v1.10.0 --extra-config=apiserver.Authorization.Mode=RBAC --feature-gates=MountPropagation=false
   # Fix the kubectl context, as it's often stale.
-     -  sudo minikube update-context
+     - minikube update-context
   # Wait for Kubernetes to be up and ready.
      - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
    script: 
@@ -53,19 +54,19 @@ build-maya:
 baseline-image:
   stage: baseline
   script:
-    - pwd
-    - export BRANCH=${CI_COMMIT_REF_NAME}
-    - echo $BRANCH
-    - export COMMIT=${CI_COMMIT_SHA:0:8}
-    - echo $COMMIT
-    - git clone https://github.com/openebs/e2e-infrastructure.git
-    - cd e2e-infrastructure/baseline
-    - ansible-playbook commit-writer.yml --extra-vars "branch=$BRANCH repo=$CI_PROJECT_NAME commit=$COMMIT"
-    - git status
-    - git add baseline
-    - git status
-    - git commit -m "updated $CI_PROJECT_NAME commit:$COMMIT"
-    - git push  https://$user:$pass@github.com/openebs/e2e-infrastructure.git --all
+     - pwd
+     - export BRANCH=${CI_COMMIT_REF_NAME}
+     - echo $BRANCH
+     - export COMMIT=${CI_COMMIT_SHA:0:8}
+     - echo $COMMIT
+     - git clone https://github.com/openebs/e2e-infrastructure.git
+     - cd e2e-infrastructure/baseline
+     - ansible-playbook commit-writer.yml --extra-vars "branch=$BRANCH repo=$CI_PROJECT_NAME commit=$COMMIT"
+     - git status
+     - git add baseline
+     - git status
+     - git commit -m "updated $CI_PROJECT_NAME commit:$COMMIT"
+     - git push  https://$user:$pass@github.com/openebs/e2e-infrastructure.git --all
      #- curl -X POST -F token=$AWS -F ref=master https://gitlab.openebs.ci/api/v4/projects/1/trigger/pipeline
      #- curl -X POST -F token=$AWS -F ref=infra-chaos https://gitlab.openebs.ci/api/v4/projects/1/trigger/pipeline
      #- curl -X POST -F token=$GCP -F ref=master https://gitlab.openebs.ci/api/v4/projects/4/trigger/pipeline
