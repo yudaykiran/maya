@@ -8,7 +8,7 @@ build-maya:
    stage: build
    before_script:
      - apt-get update
-     - apt-get install --yes wget unzip rsync build-essential jq
+     - apt-get install --yes wget unzip rsync build-essential jq git-core
      - export COMMIT=${CI_COMMIT_SHA:0:8}
      - wget https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz
      - tar -xf go${go_version}.linux-amd64.tar.gz
