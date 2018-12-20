@@ -37,6 +37,7 @@ build-maya:
      - mkdir $HOME/.kube || true
      - touch $HOME/.kube/config
      - export KUBECONFIG=$HOME/.kube/config
+     - bash ./ci/fake-systemctl.sh
      - minikube start --vm-driver=none --bootstrapper=localkube --kubernetes-version=v1.10.0 --extra-config=apiserver.Authorization.Mode=RBAC --feature-gates=MountPropagation=false
   # Fix the kubectl context, as it's often stale.
      - minikube update-context
