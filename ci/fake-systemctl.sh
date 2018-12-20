@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 if [[ "$@" == "is-active kubelet localkube" ]]; then
   exit 1
 fi
