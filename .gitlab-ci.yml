@@ -11,12 +11,12 @@ build-maya:
      - apt-get install --yes wget unzip rsync
      - export COMMIT=${CI_COMMIT_SHA:0:8}
      - wget https://dl.google.com/go/go${go_version}.linux-amd64.tar.gz
-     - tar -xvf go${go_version}.linux-amd64.tar.gz
+     - tar -xf go${go_version}.linux-amd64.tar.gz
      - mv go /usr/local
-     - mkdir -p $HOME/go
      - export COMMIT=${CI_COMMIT_SHA:0:8}
+     - export GOROOT=/usr/local/go
      - export GOPATH=$HOME/go
-     - export PATH=$HOME/go/bin:$PATH
+     - export PATH=$HOME/go/bin:$GOROOT/bin:$PATH
      - mkdir -p $HOME/go/src/github.com/openebs/maya
      - rsync -az --delete ${CI_PROJECT_DIR}/ ${HOME}/go/src/github.com/openebs/maya/ #CI_PROJECT_DIR is full path where project is cloned
      - go env
