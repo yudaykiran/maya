@@ -56,8 +56,7 @@ baseline-image:
      - echo $BRANCH
      - export COMMIT=${CI_COMMIT_SHORT_SHA}
      - echo $COMMIT
-     - git clone https://github.com/$REPO/e2e-infrastructure.git
-     - git checkout $BRANCH
+     - git clone -b $BRANCH https://github.com/$REPO/e2e-infrastructure.git
      - cd e2e-infrastructure/baseline
      - ansible-playbook commit-writer.yml --extra-vars "branch=$BRANCH repo=$CI_PROJECT_NAME commit=$COMMIT"
      - git status
@@ -65,7 +64,7 @@ baseline-image:
      - git status
      - git commit -m "updated $CI_PROJECT_NAME commit:$COMMIT"
      - git push  https://$user:$pass@github.com/$REPO/e2e-infrastructure.git --all
-     - curl -X POST -F variables[INFRA_BRANCH]=$BRANCH -F token=$OPENSHIFT -F ref=openebsbase https://gitlab.openebs.ci/api/v4/projects/15/trigger/pipeline
+     - curl -X POST -F variables[INFRA_BRANCH]=$BRANCH -F token=$OPENSHIFT -F ref=OpenEBS-base https://gitlab.openebs.ci/api/v4/projects/15/trigger/pipeline
 
 clean-maya:
   when: always
